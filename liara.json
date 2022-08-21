@@ -1,0 +1,11 @@
+{
+	"django": {
+		"settingsFile": "config/settings/production.py"
+	},
+	"disks": [
+		{
+			"name": "blogella-disk",
+			"mountTo": "media"
+		}
+	]
+}
