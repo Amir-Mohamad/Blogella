@@ -7,23 +7,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0001_initial'),
+        ("blog", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='article',
-            name='preview',
+            model_name="article",
+            name="preview",
             field=models.CharField(blank=True, max_length=500, null=True),
         ),
         migrations.AddField(
-            model_name='article',
-            name='vpn',
+            model_name="article",
+            name="vpn",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='article',
-            name='cover',
-            field=models.ImageField(upload_to='media/article/', validators=[blog.validators.validate_cover]),
+            model_name="article",
+            name="cover",
+            field=models.ImageField(
+                upload_to="media/article/", validators=[blog.validators.validate_cover]
+            ),
         ),
     ]

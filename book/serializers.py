@@ -4,8 +4,8 @@ from .models import Book
 
 class BookSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
-        remove_fields = kwargs.pop('remove_fields', None)
-        fields = kwargs.pop('fields', None)
+        remove_fields = kwargs.pop("remove_fields", None)
+        fields = kwargs.pop("fields", None)
         super(BookSerializer, self).__init__(*args, **kwargs)
 
         if remove_fields:
@@ -18,16 +18,16 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = '__all__'
-    
+        fields = "__all__"
+
     def get_category(self, obj):
         return {
-            'id':  obj.category.id if obj.category else None,
-            'name': obj.category.name if obj.category else None,
+            "id": obj.category.id if obj.category else None,
+            "name": obj.category.name if obj.category else None,
         }
 
     def get_author(self, obj):
         if obj.author:
-            return obj.author.username,
+            return (obj.author.username,)
         else:
             return None

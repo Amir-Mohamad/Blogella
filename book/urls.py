@@ -3,7 +3,7 @@ from rest_framework import routers
 from . import views
 
 router = routers.SimpleRouter()
-router.register(r'', views.BookViewSet)
+router.register(r"", views.BookViewSet)
 
-app_name = 'book'
+app_name = "book"
 urlpatterns = router.urls

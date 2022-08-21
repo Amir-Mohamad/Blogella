@@ -1,26 +1,48 @@
 import sys
-sys.path.append('/usr/src/app/config/settings')
+
+sys.path.append("/usr/src/app/config/settings")
 import dj_database_url
-from base import (BASE_DIR, SECRET_KEY, INSTALLED_APPS, MIDDLEWARE,
-    TEMPLATES, AUTH_PASSWORD_VALIDATORS, AUTH_USER_MODEL, ROOT_URLCONF,
-    WSGI_APPLICATION, LANGUAGE_CODE, TIME_ZONE, USE_I18N, USE_L10N, USE_TZ,
-    STATIC_URL, STATIC_ROOT, STATICFILES_DIRS, REST_FRAMEWORK, MAX_UPLOAD_ADMIN_SIZE,
-    DEFAULT_AUTO_FIELD, SIMPLE_JWT, SITE_ID, CORS_ALLOW_ALL_ORIGINS)
+from base import (
+    BASE_DIR,
+    SECRET_KEY,
+    INSTALLED_APPS,
+    MIDDLEWARE,
+    TEMPLATES,
+    AUTH_PASSWORD_VALIDATORS,
+    AUTH_USER_MODEL,
+    ROOT_URLCONF,
+    WSGI_APPLICATION,
+    LANGUAGE_CODE,
+    TIME_ZONE,
+    USE_I18N,
+    USE_L10N,
+    USE_TZ,
+    STATIC_URL,
+    STATIC_ROOT,
+    STATICFILES_DIRS,
+    REST_FRAMEWORK,
+    MAX_UPLOAD_ADMIN_SIZE,
+    DEFAULT_AUTO_FIELD,
+    SIMPLE_JWT,
+    SITE_ID,
+    CORS_ALLOWED_ORIGINS,
+)
 
 import os
+
 DEBUG = False
-# NOTE: domain is not avalaible
-ALLOWED_HOSTS = ['blogella.ir', ]
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
 
 # print(os.environ.get('NAME'))
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('NAME'), 
-        'USER':  os.environ.get('USER'), 
-        'PASSWORD':  os.environ.get('PASSWORD'),
-        'HOST':  os.environ.get('HOST'), 
-        'PORT':  os.environ.get('PORT'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
     }
 }
 
@@ -35,9 +57,9 @@ DATABASES = {
 # }
 
 # AWS_LOCATION = 'static'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = ''
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = ""
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = True

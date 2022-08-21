@@ -13,6 +13,7 @@ from .serializers import ReplySerializer, CommentSerializer, ArticleSerializer
 from django.contrib.contenttypes.models import ContentType
 from book.models import Book
 
+
 class BasicPagination:
     pass
 
@@ -27,8 +28,9 @@ class ArticleListView(ListAPIView):
     serializer_class = ArticleSerializer
 
     def get_serializer(self, *args, **kwargs):
-        serializer = self.serializer_class(self.get_queryset(), many=True, remove_fields=[
-                                            'created', 'description'])
+        serializer = self.serializer_class(
+            self.get_queryset(), many=True, remove_fields=["created", "description"]
+        )
         return serializer
 
 
@@ -36,10 +38,10 @@ class ArticleRetrieveView(RetrieveAPIView):
     queryset = Article.active.all()
     pagination_class = StandardResultsSetPagination
     serializer_class = ArticleSerializer
-    lookup_field = 'slug'
+    lookup_field = "slug"
 
 
-#TODO: Refactor comment and reply views (we are using M2M and thats wrong)
+# TODO: Refactor comment and reply views (we are using M2M and thats wrong)
 
 
 class CommentListView(ListAPIView):
@@ -48,54 +50,71 @@ class CommentListView(ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        queryset = Comment.active.filter(article__id=self.kwargs['pk'])
+        queryset = Comment.active.filter(article__id=self.kwargs["pk"])
 
         return queryset
 
 
 class CommentCreate(APIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
     serializer_class = CommentSerializer
 
     def post(self, request, type, parent_id):
         # default parent
         parent = get_object_or_404(Article, id=parent_id)
 
-        if type == 'article':
+        if type == "article":
             parent = get_object_or_404(Article, id=parent_id)
-        elif type == 'book':
+        elif type == "book":
             parent = get_object_or_404(Book, id=parent_id)
 
-        parent_content_type=ContentType.objects.get_for_model(parent)
+        parent_content_type = ContentType.objects.get_for_model(parent)
 
-        body = request.POST.get('body')
+        body = request.POST.get("body")
         Comment.objects.create(
-            user=request.user, parent_object_id=parent.id, body=body, parent_content_type=parent_content_type)
+            user=request.user,
+            parent_object_id=parent.id,
+            body=body,
+            parent_content_type=parent_content_type,
+        )
         # serializer = self.serializer_class(
         #     queryset, partial=True, context={'request': request})
         return Response(status=status.HTTP_201_CREATED)
 
 
 class CommentUpdate(APIView):
-    permission_classes = [IsOwnerOrReadOnly, ]
+    permission_classes = [
+        IsOwnerOrReadOnly,
+    ]
     serializer_class = CommentSerializer
 
     def patch(self, request, type, parent_id, comment_id):
         # default parent
         parent = get_object_or_404(Article, id=parent_id)
-         
-        if type == 'article':
+
+        if type == "article":
             parent = get_object_or_404(Article, id=parent_id)
-        elif type == 'book':
+        elif type == "book":
             parent = get_object_or_404(Book, id=parent_id)
 
-        parent_content_type=ContentType.objects.get_for_model(parent)
+        parent_content_type = ContentType.objects.get_for_model(parent)
 
-        comment = get_object_or_404(Comment, pk=comment_id, parent_content_type=parent_content_type, parent_object_id=parent_id)
+        comment = get_object_or_404(
+            Comment,
+            pk=comment_id,
+            parent_content_type=parent_content_type,
+            parent_object_id=parent_id,
+        )
         self.check_object_permissions(request, comment)
 
         serializer = self.serializer_class(
-            instance=comment, data=request.data, partial=True, context={"request": request})
+            instance=comment,
+            data=request.data,
+            partial=True,
+            context={"request": request},
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -103,17 +122,24 @@ class CommentUpdate(APIView):
 
 
 class CommentDelete(APIView):
-    permission_classes = [IsOwnerOrReadOnly, ]
+    permission_classes = [
+        IsOwnerOrReadOnly,
+    ]
 
     def delete(self, request, type, parent_id, comment_id):
         parent = get_object_or_404(Article, id=parent_id)
-        if type == 'article':
+        if type == "article":
             parent = get_object_or_404(Article, id=parent_id)
-        elif type == 'book':
+        elif type == "book":
             parent = get_object_or_404(Book, id=parent_id)
 
-        parent_content_type=ContentType.objects.get_for_model(parent)
-        comment = get_object_or_404(Comment, pk=comment_id, parent_content_type=parent_content_type, parent_object_id=parent_id)
+        parent_content_type = ContentType.objects.get_for_model(parent)
+        comment = get_object_or_404(
+            Comment,
+            pk=comment_id,
+            parent_content_type=parent_content_type,
+            parent_object_id=parent_id,
+        )
 
         self.check_object_permissions(request, comment)
 
@@ -126,27 +152,30 @@ class ReplyListView(ListAPIView):
     """
     Shows all replies related to single comment
     """
+
     permission_classes = [ReadOnly]
     serializer_class = ReplySerializer
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        queryset = Reply.objects.filter(comment__id=self.kwargs['pk'])
+        queryset = Reply.objects.filter(comment__id=self.kwargs["pk"])
 
         return queryset
 
 
 class ReplyCreate(APIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
     serializer_class = ReplySerializer
 
     def post(self, request, comment_id):
 
         comment = get_object_or_404(Comment, id=comment_id)
-        
-        serializer = self.serializer_class(data={'comment': comment, 'user': request.user, 'body': request.POST['body']})   # type: ignore 
+
+        serializer = self.serializer_class(data={"comment": comment, "user": request.user, "body": request.POST["body"]})  # type: ignore
         if serializer.is_valid():
-            serializer.save(user=request.user, comment=comment) 
+            serializer.save(user=request.user, comment=comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -163,7 +192,11 @@ class ReplyUpdate(APIView):
         self.check_object_permissions(request, reply)
 
         serializer = self.serializer_class(
-            instance=reply, data=request.data, partial=True, context={"request": request})
+            instance=reply,
+            data=request.data,
+            partial=True,
+            context={"request": request},
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -171,7 +204,9 @@ class ReplyUpdate(APIView):
 
 
 class ReplyDelete(APIView):
-    permission_classes = [IsOwnerOrReadOnly, ]
+    permission_classes = [
+        IsOwnerOrReadOnly,
+    ]
     serializer_class = ReplySerializer
 
     def delete(self, request, comment_id, reply_id):
@@ -185,7 +220,9 @@ class ReplyDelete(APIView):
 
 
 class ArticleLike(APIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def post(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)

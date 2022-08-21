@@ -14,60 +14,126 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('taggit', '0005_auto_20220424_2025'),
+        ("taggit", "0005_auto_20220424_2025"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('updated', models.DateTimeField(auto_now_add=True)),
-                ('created', models.DateTimeField(auto_now=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('name', models.CharField(max_length=100)),
-                ('slug', models.SlugField(max_length=100, unique=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("updated", models.DateTimeField(auto_now_add=True)),
+                ("created", models.DateTimeField(auto_now=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("name", models.CharField(max_length=100)),
+                ("slug", models.SlugField(max_length=100, unique=True)),
             ],
             options={
-                'verbose_name': 'Article Category',
-                'verbose_name_plural': 'Article Categories',
+                "verbose_name": "Article Category",
+                "verbose_name_plural": "Article Categories",
             },
         ),
         migrations.CreateModel(
-            name='List',
+            name="List",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('updated', models.DateTimeField(auto_now_add=True)),
-                ('created', models.DateTimeField(auto_now=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('name', models.CharField(max_length=250)),
-                ('description', models.TextField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("updated", models.DateTimeField(auto_now_add=True)),
+                ("created", models.DateTimeField(auto_now=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("name", models.CharField(max_length=250)),
+                ("description", models.TextField()),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Article',
+            name="Article",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('updated', models.DateTimeField(auto_now_add=True)),
-                ('created', models.DateTimeField(auto_now=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('title', models.CharField(max_length=250)),
-                ('slug', models.SlugField(max_length=250, unique=True)),
-                ('description', ckeditor.fields.RichTextField()),
-                ('cover', models.ImageField(upload_to='backend/media', validators=[blog.validators.validate_cover])),
-                ('author', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.category')),
-                ('likes', models.ManyToManyField(blank=True, related_name='article_like', to=settings.AUTH_USER_MODEL)),
-                ('list', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='blog.list')),
-                ('tags', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("updated", models.DateTimeField(auto_now_add=True)),
+                ("created", models.DateTimeField(auto_now=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("title", models.CharField(max_length=250)),
+                ("slug", models.SlugField(max_length=250, unique=True)),
+                ("description", ckeditor.fields.RichTextField()),
+                (
+                    "cover",
+                    models.ImageField(
+                        upload_to="backend/media",
+                        validators=[blog.validators.validate_cover],
+                    ),
+                ),
+                (
+                    "author",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="blog.category"
+                    ),
+                ),
+                (
+                    "likes",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="article_like",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "list",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="blog.list",
+                    ),
+                ),
+                (
+                    "tags",
+                    taggit.managers.TaggableManager(
+                        help_text="A comma-separated list of tags.",
+                        through="taggit.TaggedItem",
+                        to="taggit.Tag",
+                        verbose_name="Tags",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Article',
-                'verbose_name_plural': 'Articles',
-                'ordering': ['-id'],
+                "verbose_name": "Article",
+                "verbose_name_plural": "Articles",
+                "ordering": ["-id"],
             },
         ),
     ]

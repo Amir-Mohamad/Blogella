@@ -3,7 +3,7 @@ from core.models import Comment, Category, Reply
 from recipe.models import Recipe
 from django_seed import Seed
 
-seeder = Seed.seeder(locale='en')
+seeder = Seed.seeder(locale="en")
 
 
 User = get_user_model()

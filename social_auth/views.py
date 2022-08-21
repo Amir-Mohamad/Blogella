@@ -8,7 +8,9 @@ from .serializers import GoogleSocialAuthSerializer
 class GoogleSocialAuthView(GenericAPIView):
 
     serializer_class = GoogleSocialAuthSerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [
+        AllowAny,
+    ]
 
     def post(self, request):
         """
@@ -21,5 +23,5 @@ class GoogleSocialAuthView(GenericAPIView):
 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        data = ((serializer.validated_data)['auth_token'])
+        data = (serializer.validated_data)["auth_token"]
         return Response(data, status=status.HTTP_200_OK)

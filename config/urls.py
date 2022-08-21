@@ -25,7 +25,7 @@ from django.conf.urls.static import static
 schema_view = get_schema_view(
     openapi.Info(
         title="Snippets API",
-        default_version='v1',
+        default_version="v1",
         description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contact@snippets.local"),
@@ -35,23 +35,30 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$',
-            schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger',
-            cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc',
-            cache_timeout=0), name='schema-redoc'),
+    path("admin/", admin.site.urls),
+    re_path(
+        r"^swagger(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    re_path(
+        r"^swagger/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    re_path(
+        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    ),
     # accounts apps
-    path('api/auth/', include('authentication.urls', namespace='authentication')),
-    path('api/blog/', include('blog.urls', namespace='blog')),
-    path('api/books/', include('book.urls', namespace='book')),
-    path('social_auth/', include(('social_auth.urls',
-         'social_auth'), namespace="social_auth")),
-    path('__debug__/', include('debug_toolbar.urls')),
-
+    path("api/auth/", include("authentication.urls", namespace="authentication")),
+    path("api/blog/", include("blog.urls", namespace="blog")),
+    path("api/books/", include("book.urls", namespace="book")),
+    path(
+        "social_auth/",
+        include(("social_auth.urls", "social_auth"), namespace="social_auth"),
+    ),
+    path("__debug__/", include("debug_toolbar.urls")),
     # path('api/', include('core.urls', namespace='core')),
 ]
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

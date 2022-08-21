@@ -1,4 +1,3 @@
-
 from book.models import Category
 from django.test import TestCase
 from django.urls import reverse
@@ -18,27 +17,28 @@ class PublicAPIBookTest(TestCase):
         self.client = APIClient()
 
         self.book = baker.make(
-            Book, _create_files=True, tags='', content='', is_active=True, cover='')
+            Book, _create_files=True, tags="", content="", is_active=True, cover=""
+        )
         # self.book = mixer.blend('book.book', content='', tags='')
 
     def test_list_api_view(self):
         """Tests the list of books"""
 
         baker.make(
-            Book, _create_files=True, tags='', content='', is_active=True, cover='')
+            Book, _create_files=True, tags="", content="", is_active=True, cover=""
+        )
 
         books = Book.objects.all()
-        res = self.client.get(reverse('book:book-list'))
+        res = self.client.get(reverse("book:book-list"))
         sz_data = BookSerializer(books, many=True)
 
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.data['results'], sz_data.data)
+        self.assertEqual(res.data["results"], sz_data.data)
 
     def test_book_detail_view(self):
         """Tests single book data"""
 
-        res = self.client.get(
-            reverse('book:book-detail', args=(self.book.id,)))
+        res = self.client.get(reverse("book:book-detail", args=(self.book.id,)))
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.data['title'], self.book.title)
-        self.assertEqual(res.data['slug'], self.book.slug)
+        self.assertEqual(res.data["title"], self.book.title)
+        self.assertEqual(res.data["slug"], self.book.slug)

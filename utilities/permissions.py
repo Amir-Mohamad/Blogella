@@ -8,7 +8,7 @@ class IsSuperUserMixin(UserPassesTestMixin):
 
 
 class IsOwnerOrReadOnly(BasePermission):
-    message = 'permission denied, you\'re not the owner'
+    message = "permission denied, you're not the owner"
 
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user
@@ -26,12 +26,12 @@ class ReadOnly(BasePermission):
 
 class ProfilePermissions(BasePermission):
     def has_permission(self, request, view):
-        print(request.user, '***'*100)
+        print(request.user, "***" * 100)
 
         return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
-        print(request.user, '***'*100)
+        print(request.user, "***" * 100)
 
         if request.user == obj:
             return True
@@ -42,7 +42,5 @@ class ProfilePermissions(BasePermission):
 class IsStaffOrReadOnly(BasePermission):
     def has_permission(self, request, view):
         return bool(
-            request.method in SAFE_METHODS or
-            request.user and
-            request.user.is_staff
+            request.method in SAFE_METHODS or request.user and request.user.is_staff
         )

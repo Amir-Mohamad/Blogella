@@ -13,26 +13,23 @@ User = get_user_model()
 
 class Article(BlogBaseModel):
     """
-        NOTE: 
-            - The author field must be null because of on_delete
+    NOTE:
+        - The author field must be null because of on_delete
     """
+
     STATUS_CHOICES = (
-        ('d', 'draft'),
-        ('p', "publish"),
+        ("d", "draft"),
+        ("p", "publish"),
     )
-    author = models.ForeignKey(
-        User, blank=True, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    list = models.ForeignKey(
-        List, blank=True, null=True, on_delete=models.SET_NULL)
+    list = models.ForeignKey(List, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique=True)
     description = RichTextField()
-    preview = models.CharField(max_length=500, default='')
-    cover = models.ImageField(
-        upload_to='media/article/', validators=[validate_cover])
-    likes = models.ManyToManyField(
-        User, blank=True, related_name='article_like')
+    preview = models.CharField(max_length=500, default="")
+    cover = models.ImageField(upload_to="media/article/", validators=[validate_cover])
+    likes = models.ManyToManyField(User, blank=True, related_name="article_like")
     vpn = models.BooleanField(default=False)
 
     objects = models.Manager()
@@ -40,7 +37,7 @@ class Article(BlogBaseModel):
     tags = TaggableManager()
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
         verbose_name = "Article"
         verbose_name_plural = "Articles"
 

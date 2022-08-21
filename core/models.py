@@ -19,19 +19,19 @@ class CoreBaseModel(models.Model):
 
 class Comment(CoreBaseModel):
     """
-        The main comment model in article and blog pages
+    The main comment model in article and blog pages
     """
-    ARTICLE = 'article'
-    BOOK = 'book'
+
+    ARTICLE = "article"
+    BOOK = "book"
     TYPE_CHOICES = (
-        (ARTICLE, 'Article'),
-        (BOOK, 'Book'),
+        (ARTICLE, "Article"),
+        (BOOK, "Book"),
     )
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     # article = models.ForeignKey(
     #     Article, on_delete=models.CASCADE, related_name='comments', null=True, blank=True)
-    body = models.CharField(max_length=400, default='')
+    body = models.CharField(max_length=400, default="")
 
     parent_object_id = models.IntegerField(default=1)
     parent_content_type = models.ForeignKey(
@@ -39,8 +39,8 @@ class Comment(CoreBaseModel):
         on_delete=models.PROTECT,
     )
     parent = GenericForeignKey(
-        'parent_content_type',
-        'parent_object_id',
+        "parent_content_type",
+        "parent_object_id",
     )
 
     objects = models.Manager()
@@ -51,6 +51,7 @@ class Comment(CoreBaseModel):
             return True
         else:
             return False
+
     is_comment_active.boolean = True
 
     def __str__(self):
@@ -59,12 +60,13 @@ class Comment(CoreBaseModel):
 
 class Reply(CoreBaseModel):
     """
-        Used for making replies on comments in articles and blogs
+    Used for making replies on comments in articles and blogs
     """
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="replies")
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="replies")
     comment = models.ForeignKey(
-        Comment, on_delete=models.CASCADE, related_name="replies")
+        Comment, on_delete=models.CASCADE, related_name="replies"
+    )
     body = models.TextField(max_length=400)
 
     def __str__(self):

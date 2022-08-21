@@ -10,6 +10,7 @@ import uuid
 
 User = get_user_model()
 
+
 class BookBaseModel(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
     created = models.DateTimeField(auto_now=True)
@@ -20,13 +21,16 @@ class BookBaseModel(models.Model):
 
 
 class Book(BookBaseModel):
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="books")
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="books")
+    author = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="books"
+    )
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="books"
+    )
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)
     content = RichTextField()
-    cover = models.ImageField(
-        upload_to='media/book/', validators=[validate_cover])
+    cover = models.ImageField(upload_to="media/book/", validators=[validate_cover])
     link = models.URLField()
 
     objects = models.Manager()
@@ -35,5 +39,3 @@ class Book(BookBaseModel):
 
     def __str__(self):
         return self.title
-
-    
